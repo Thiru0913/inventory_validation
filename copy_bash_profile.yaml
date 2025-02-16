@@ -1,0 +1,20 @@
+---
+- name: Copy .bash_profile to remote user home directory
+  template:
+    src: bash_profile.j2
+    dest: /home/rao/.bash_profile
+    mode: '0644'
+
+- name: Source .bash_profile
+  shell: source /home/rao/.bash_profile
+  args:
+    executable: /bin/bash
+
+- name: Check EFS version
+  command: efs --version
+  register: efs_version_output
+  changed_when: false
+
+- name: Display EFS version
+  debug:
+    msg: "{{ efs_version_output.stdout }}"
