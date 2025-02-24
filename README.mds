@@ -32,8 +32,8 @@ Ensure you have the following installed:
 ## **Usage**
 1. Place your EFS inventory file (`efsservers.txt`) and Ansible inventory (`inventory-lab.yaml`) in the same directory as the script.
 2. Run the script:
-   ```sh
-   python efs_inventory_comparator.py
+   ```
+   python inventoryvlidtion.py
    ```
 3. The script will generate a comparison report:
    ```
