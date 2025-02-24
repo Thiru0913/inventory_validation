@@ -1,83 +1,70 @@
-# EFS Inventory vs Ansible Inventory Comparison Tool
+# EFS vs Ansible Inventory Comparator
 
 ## Overview
-This script compares servers listed in `efsservers.txt` with the servers and configurations defined in `inventory-lab.yaml`. It generates a detailed report identifying:
+This script compares the **EFS server inventory** (`efsservers.txt`) with the **Ansible inventory** (`inventory-lab.yaml`) and generates a report highlighting inconsistencies.
 
-- Servers missing in either `efsservers.txt` or `inventory-lab.yaml`.
-- Mismatched cell assignments.
-- Incorrectly assigned host groups.
-- Incorrect server type placements (dev/prod mismatches).
-- Control group validation issues, ensuring that each group contains both a `dev` and `prod` server for resilient maintenance.
+### **Key Features**
+- Identifies **missing servers** in either inventory.
+- Detects **mismatched cell assignments** between EFS and Ansible.
+- Validates **host group placements** according to naming conventions.
+- Ensures correct **dev/prod classification** of servers.
+- Checks for **control group mismatches** in `controlgroup_*` assignments.
 
-## Purpose
-This tool helps validate and maintain an effective control group structure in an Enterprise File System (EFS) deployment. Control groups ensure that maintenance can be performed on either the dev or prod environment without impacting availability.
-
-## Features
-- Parses `efsservers.txt` to extract server details (FQDN, cell, host type).
-- Parses `inventory-lab.yaml` to extract hosts, host groups, and control groups.
-- Validates control groups to ensure they contain both `dev` and `prod` servers.
-- Generates a detailed comparison report highlighting discrepancies.
-
-## Prerequisites
-Ensure you have the following dependencies installed:
-
+---
+## **Setup Instructions**
+### **Prerequisites**
+Ensure you have the following installed:
 - Python 3.x
-- PyYAML library (`pip install pyyaml`)
+- Required Python libraries: `pyyaml`
 
-## File Descriptions
+### **Installation**
+1. Clone this repository:
+   ```sh
+   git clone <bitbucket-repo-url>
+   cd <repo-name>
+   ```
+2. Install dependencies:
+   ```sh
+   pip install pyyaml
+   ```
 
-### `efsservers.txt`
-A tab-separated file containing:
-```
-server_name	cell_name	host_type	fqdn
-```
-Example:
-```
-lukcm01server1042-emea-lab.example.com	d.dc3.uklab.ukdev.test.com	dev	lukcm01server1042-emea-lab.example.com
-```
-
-### `inventory-lab.yaml`
-Ansible inventory file defining:
-- Host groups (e.g., `l_*_<region_code>`)
-- Control groups (`controlgroup_*`)
-- Host entries with `cells` assigned.
-
-Example:
-```yaml
-copy yaml file
-```
-
-### `efs_comparison_report.txt`
-Generated report highlighting:
-- Missing servers
-- Mismatched cell assignments
-- Incorrect host group placements
-- Dev/Prod control group validation issues
-
-## Usage
-1. Place `efsservers.txt` and `inventory-lab.yaml` in the same directory as the script.
+---
+## **Usage**
+1. Place your EFS inventory file (`efsservers.txt`) and Ansible inventory (`inventory-lab.yaml`) in the same directory as the script.
 2. Run the script:
    ```sh
-   python3 compare_efs_inventory.py
+   python efs_inventory_comparator.py
    ```
-3. View the generated `efs_comparison_report.txt` for validation results.
+3. The script will generate a comparison report:
+   ```
+   efs_comparison_report.txt
+   ```
 
-## Control Group Validation Logic
-Control groups should contain **one dev and one prod server**. The script:
-- Counts dev and prod servers in each control group.
-- Flags groups where dev/prod counts are mismatched.
-- Reports missing dev/prod servers if not found in any control group.
+### **Output Report Includes:**
+- Servers **missing** in either inventory.
+- **Mismatched** storage cell assignments.
+- **Incorrect host group** placements.
+- **Incorrect dev/prod classifications**.
+- **Control group validation issues**.
 
-Example Output:
+---
+## **File Structure**
 ```
-Control Group Validation Issues:
-- controlgroup_a: Dev/Prod count mismatch (Dev: 1, Prod: 0) lukcm01server2043-emea-lab.example.com (prod) is missing.
+.
+├── inventoryvlidtion.py  # Main comparison script
+├── efsservers.txt               # EFS inventory file (input)
+├── inventory-lab.yaml           # Ansible inventory file (input)
+├── efs_comparison_report.txt    # Generated report (output)
+├── README.md                    # Documentation
 ```
 
-## Troubleshooting
-- **Parsing Errors:** Ensure `efsservers.txt` follows the correct tab-separated format.
-- **Invalid YAML Structure:** Verify `inventory-lab.yaml` contains an `all:` root node.
-- **Missing Servers in Inventory:** Check if hosts are listed under valid groups.
+---
+## **Troubleshooting**
+| Issue | Solution |
+|--------|----------|
+| `ModuleNotFoundError: No module named 'yaml'` | Run `pip install pyyaml` |
+| Report shows `Unknown` for host groups | Ensure host group naming follows `l_*_<region_code>` pattern |
+| Missing servers in report | Verify that `efsservers.txt` and `inventory-lab.yaml` are correctly formatted |
 
 
 
