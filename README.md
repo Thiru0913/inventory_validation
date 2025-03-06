@@ -25,9 +25,9 @@ pip install pyyaml
 ## Usage
 Run the script with:
 ```sh
-python script.py
+python prodinventory_validation.py
 ```
-The validation results will be stored in `validation_output.txt`.
+The validation results will be stored in `validation_report.html`.
 
 ## Output Details
 The script produces the following validation checks:
@@ -40,11 +40,11 @@ The script produces the following validation checks:
 ## File Structure
 ```
 project-folder/
-│── script.py                 # The main validation script
-│── efsservers.txt            # Dynamically generated server list
-│── inventory-prod.yaml       # YAML inventory file
-│── validation_output.txt     # Validation results
-│── README.md                 # This file
+│── prodinventory_validation.py     # The main validation script
+│── efsservers.txt                  # Dynamically generated server list
+│── inventory-prod.yaml             # YAML inventory file
+│── validation_report.html           # Validation results
+│── README.md                       
 ```
 
 ## Troubleshooting
@@ -52,8 +52,6 @@ project-folder/
 - If the script fails due to missing dependencies, install `pyyaml`.
 - Ensure the YAML inventory file exists and is correctly formatted.
 
-## Contributing
-Feel free to submit pull requests or report issues via Bitbucket.
 
-## License
-This project is licensed under the MIT License.
+
+
