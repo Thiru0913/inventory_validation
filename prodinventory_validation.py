@@ -1,7 +1,9 @@
 import yaml
 import re
+import os
+import subprocess
 
-# Define the pattern-to-group mapping (same as before)
+# Define the pattern-to-group mapping 
 PATTERN_TO_GROUP = {
     r"lauau2pefs.*": "l_aja_ausy01sr1",
     r"lauau1cefs.*": "l_aja_ausy02sr1",
@@ -30,11 +32,17 @@ PATTERN_TO_GROUP = {
     r"lusva01efs.*": "l_amrs_usva01",
 }
 
-inventory_file = 'inventory-prod.yaml'  # Replace with your YAML inventory file path
-efs_file = 'efsservers.txt'  # Replace with your EFS server file path
-output_file = 'validation_output.txt'  # Path to save the output file
+# Define script directory
+script_dir = os.path.dirname(os.path.abspath(__file__))
+efs_file = os.path.join(script_dir, 'efsservers.txt')
+output_file = os.path.join(script_dir, 'validation_output.txt')
+
+# Generate efsservers.txt dynamically in the script folder
+cmd = f"efs display efsservers | awk 'NR>3 {{print $2 \",\" $1 \",\" $3}}' > {efs_file}"
+subprocess.run(cmd, shell=True, check=True)
 
 # Load inventory yaml
+inventory_file = os.path.join(script_dir, 'inventory-lab.yaml')
 with open(inventory_file, 'r') as file:
     inventory1 = yaml.safe_load(file)
 
@@ -362,7 +370,7 @@ def generate_html_report(file_path, output_html="validation_report.html"):
     """
     
     for validation, details in validation_data:
-        formatted_details = "\n                  ".join(details.split(", "))  # Proper indentation for multiline cells
+        formatted_details = "<br>".join(details.split(",             "))  # Ensures line breaks within the <pre> tag
         html_content += f"<tr><td>{validation}</td><td class='details-column'><pre>{formatted_details}</pre></td></tr>"
     
     html_content += """
