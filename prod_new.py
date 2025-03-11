@@ -2,7 +2,7 @@ import yaml
 import re
 import os
 import subprocess
-import rich
+
 
 # Define the pattern-to-group mapping 
 PATTERN_TO_GROUP = {
